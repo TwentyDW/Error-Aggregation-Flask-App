@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+  
+{% block content %}
+    <h1>Error aggregation report</h1>
+    <h2>Please input time interval</h2>
+	
+    <form action="/email_errors" method="POST">
+		<p>beginning of interval (MM, DD, YYYYY, hh, mm, ss; 24-hour format)</p>
+		{{ form.day.label }}
+		{{ form.day }}
+		{{ form.month.label }}
+		{{ form.month }}
+		{{ form.year.label }}
+		{{ form.year }}
+		{{ form.hour.label }}
+		{{ form.hour }}
+		{{ form.min.label }}
+		{{ form.min }}
+		{{ form.sec.label }}
+		{{ form.sec }}
+		</form>
+		<form action="/email_errors" method="POST">
+		<p>end of interval (MM, DD YYYYY, hh, mm, ss; 24-hour format)</p>
+		{{ form.day.label }}
+		{{ form.day }}
+		{{ form.month.label }}
+		{{ form.month }}
+		{{ form.year.label }}
+		{{ form.year }}
+		{{ form.hour.label }}
+		{{ form.hour }}
+		{{ form.min.label }}
+		{{ form.min }}
+		{{ form.sec.label }}
+		{{ form.sec }}
+    <input type="submit" name="my-form" value="Send error aggregation report">
+    </form>
+{% endblock %}

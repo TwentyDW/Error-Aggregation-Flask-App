@@ -1,0 +1,1 @@
+# !!!! if redis key value type error occurs, stop redis service and open redis-server.exe in program files
