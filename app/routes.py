@@ -2,8 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, current_ap
 from flask_mail import Mail, Message
 from raygun4py import raygunprovider
 from raygun4py.middleware import flask
-from myforms import TimeForm
-import error_handling, mail_msg
+import error_handling
 
 app = Flask(__name__)
 raygun = raygunprovider.RaygunSender("VaBnbg4l+u9r+2qgdGtx1A==") # raygun
@@ -51,35 +50,47 @@ def error4():
   raise ValueError('Test ValueError')
   return error
   
-@app.route('/email_errors', methods=['GET', 'POST'])
+@app.route('/email_errors')
 def email_errors():
-  beginningform = TimeForm(request.form)
-  endform = TimeForm(request.form)
 
-  if request.method == 'POST':
-		beginning = beginningform.year + beginningform.month + beginningform.day + beginningform.hour + beginningform.min + beginningform.sec
-		end = endform.year + endform.month + endform.day + endform.hour + endform.min + endform.sec
-		
-		
-		begformatted = "%s/%s/%s %s:%s:%s" %(beginningform.month, beginningform.day, beginningform.year, beginningform.hour, beginningform.min, beginningform.sec)
-		endformatted = "%s/%s/%s %s:%s:%s" %(endform.month, endform.day, endform.year, endform.hour, endform.min, endform.sec)
-		report = "Between %s and %s, the following errors occurred:\n" %(begformatted, endformatted)
-		
-		errorcount = error_handling.count_errors(int(beginning), int(end))
-		for error in errorcount:
-			report += "%d of error \"%s\"\n" %(errorcount[error], error_handling.db.lindex(error, 0))	
-
-		# move this to mail module
-		ADMINS = ["derekw@arubanetworks.com"]
-		msg = Message("Error Aggregation Report", sender = "derek.wang29@gmail.com", recipients = ADMINS)
-		msg.body = report
-		mail = Mail(app)
-		mail.send(msg)
-
-		return render_template('email_errors.html', form = beginningform) 
-
-  elif request.method == 'GET':
-    return render_template('email_errors.html')		
+		return render_template('email_errors.html') 
   
+@app.route('/emailed_errors', methods=['GET', 'POST'])
+def emailed_errors():
+
+	begyear = request.form['begyear']
+	begmonth = request.form['begmonth']
+	begday = request.form['begday']
+	beghour = request.form['beghour']
+	begmin = request.form['begmin']
+	begsec = request.form['begsec']
+	endyear = request.form['endyear']
+	endmonth = request.form['endmonth']
+	endday = request.form['endday']
+	endhour = request.form['endhour']
+	endmin = request.form['endmin']
+	endsec = request.form['endsec']
+
+	beginning = begyear + begmonth + begday + beghour + begmin + begsec
+	end = endyear + endmonth + endday + endhour + endmin + endsec
+
+
+	begformatted = "%s/%s/%s %s:%s:%s" %(begmonth, begday, begyear, beghour, begmin, begsec)
+	endformatted = "%s/%s/%s %s:%s:%s" %(endmonth, endday, endyear, endhour, endmin, endsec)
+	report = "Between %s and %s, the following errors occurred:\n" %(begformatted, endformatted)
+
+	errorcount = error_handling.count_errors(int(beginning), int(end))
+	for error in errorcount:
+		report += "%d of error \"%s\"\n" %(errorcount[error], error_handling.db.lindex(error, 0))	
+
+	# move this to mail module
+	ADMINS = ["derekw@arubanetworks.com"]
+	msg = Message("Error Aggregation Report", sender = "derek.wang29@gmail.com", recipients = ADMINS)
+	msg.body = report
+	mail = Mail(app)
+	mail.send(msg)
+	
+	return render_template('emailed_errors.html')
+
 if __name__ == '__main__':
   app.run(debug=True)
