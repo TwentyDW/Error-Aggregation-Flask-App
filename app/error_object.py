@@ -1,7 +1,6 @@
 """ use json.dumps to convert obj to string
 
 error object:
-  - hash (maybe not)
   - name string
 	- stack trace string
 	- first occurrence timestamp
