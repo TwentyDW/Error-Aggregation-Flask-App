@@ -17,6 +17,8 @@ def internal_error(error):
   error = str(error)
   error_handling.store_error(error)
   return redirect (url_for('error_page'), code = 302)
+	
+	# test traceback here
 
 def send_error_to_raygun():
   err = error_handling.sys.exc_info()

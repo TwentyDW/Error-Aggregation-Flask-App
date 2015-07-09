@@ -4,3 +4,20 @@
 'beginningform' is undefined 2015/07/07 13:52:28
 'form' is undefined 2015/07/07 14:04:57
 integer division or modulo by zero 2015/07/07 14:28:07
+integer division or modulo by zero 2015/07/09 14:49:51
+global name 'spam' is not defined 2015/07/09 14:49:54
+cannot concatenate 'str' and 'int' objects 2015/07/09 14:49:56
+Test ValueError 2015/07/09 14:49:57
+global name 'form' is not defined 2015/07/09 14:49:58
+integer division or modulo by zero 2015/07/09 15:06:08
+global name 'spam' is not defined 2015/07/09 15:06:10
+cannot concatenate 'str' and 'int' objects 2015/07/09 15:06:11
+Test ValueError 2015/07/09 15:06:12
+Test ValueError 2015/07/09 15:08:26
+cannot concatenate 'str' and 'int' objects 2015/07/09 15:08:29
+global name 'spam' is not defined 2015/07/09 15:08:30
+integer division or modulo by zero 2015/07/09 15:08:31
+integer division or modulo by zero 2015/07/09 15:53:41
+global name 'spam' is not defined 2015/07/09 15:53:44
+cannot concatenate 'str' and 'int' objects 2015/07/09 15:53:45
+Test ValueError 2015/07/09 15:53:46

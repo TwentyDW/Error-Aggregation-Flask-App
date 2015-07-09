@@ -1,4 +1,8 @@
-import datetime, redis, hashlib, pytz, time, os, sys
+import datetime, redis, hashlib, pytz, time, os, sys, json
+
+##### identify using hash of error string and stack trace combined
+
+
 
 db = redis.StrictRedis("localhost")
 mytz = pytz.timezone('US/Pacific')
@@ -9,6 +13,8 @@ def write_str_to_file(string, filename):
     file.write(string)
 
 def store_error(errorstring):
+
+  # also test traceback here to see if it produces the same result	
   error_time = datetime.datetime.now(mytz)
   
   # write to local file
@@ -24,7 +30,7 @@ def store_error(errorstring):
     if hashederror == db.lindex("list_of_errors", i):
       break
   else:
-    db.lpush("list_of_errors", hashederror)
+    db.lpush("list_of_errors", hashederror) # if hashederror is not in list, add it
   
   if db.llen(hashederror) == 0 or db.lindex(hashederror, 0) != unhashed_error:
     db.lpush(hashederror, unhashed_error)
@@ -32,6 +38,21 @@ def store_error(errorstring):
     pass
 	
   db.rpush(hashederror, error_time.strftime("%Y%m%d%H%M%S"))
+	
+	#==============================
+	# update info about error
+	if db.get(hashederror):
+	  error_instance_json = db.get(hashederror)
+		error_instance = json.loads(error_instance_json)
+		error_instance.set_last_occurrence(error_time)  # update last occurrence time stamp
+		error_instance.set_count(error_instance.get_count + 1) # increase error count by 1
+	else:
+	  error_instance = Error_Object(unhashed_error, """stack trace string""", error_time, error_time, 1)
+		
+	error_instance_json = json.dumps(error_instance, ensure_ascii=True)
+	db.set(hashederror, error_instance_json)
+		
+	
   
     
 def count_errors(beginning, end):
@@ -45,4 +66,6 @@ def count_errors(beginning, end):
         else:
           errorcount[db.lindex("list_of_errors", i)] = 1
   return errorcount
+	
+	
   
