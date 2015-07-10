@@ -16,9 +16,7 @@ def internal_error(error):
   send_error_to_raygun()
   error = str(error)
   error_handling.store_error(error)
-  return redirect (url_for('error_page'), code = 302)
-	
-	# test traceback here
+  return redirect (url_for('error_page'), code = 302) # will change
 
 def send_error_to_raygun():
   err = error_handling.sys.exc_info()
@@ -73,17 +71,7 @@ def emailed_errors():
 	endmin = request.form['endmin']
 	endsec = request.form['endsec']
 
-	beginning = begyear + begmonth + begday + beghour + begmin + begsec
-	end = endyear + endmonth + endday + endhour + endmin + endsec
-
-
-	begformatted = "%s/%s/%s %s:%s:%s" %(begmonth, begday, begyear, beghour, begmin, begsec)
-	endformatted = "%s/%s/%s %s:%s:%s" %(endmonth, endday, endyear, endhour, endmin, endsec)
-	report = "Between %s and %s, the following errors occurred:\n" %(begformatted, endformatted)
-
-	errorcount = error_handling.count_errors(int(beginning), int(end))
-	for error in errorcount:
-		report += "%d of error \"%s\"\n" %(errorcount[error], error_handling.db.lindex(error, 0))	
+	report = error_handling.report_errors()
 
 	# move this to mail module
 	ADMINS = ["derekw@arubanetworks.com"]
