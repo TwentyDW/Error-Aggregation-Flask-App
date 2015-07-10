@@ -9,7 +9,7 @@ def write_str_to_file(string, filename):
   with open(location, "a") as file:
     file.write(string)
 
-def store_error(errorstring):
+def store_error(errorstring, flaskrequest):
 	error_time = datetime.datetime.now(mytz)
 
 	#hash the error's name
@@ -27,12 +27,12 @@ def store_error(errorstring):
 	if db.get(hashederror):
 		error_instance_dict_json = db.get(hashederror)
 		error_instance_dict = json.loads(error_instance_dict_json)
-		error_instance = Error_Object("","","","",-5)
+		error_instance = Error_Object("","","","","",-5)
 		error_instance.set_dict(error_instance_dict)
 		error_instance.set_last_occurrence(error_time.strftime("%Y/%m/%d %H:%M:%S"))  # update last occurrence time stamp
 		error_instance.set_count(error_instance.get_count() + 1) # increase error count by 1
 	else:
-		error_instance = Error_Object(errorstring, traceback.format_exc(), error_time.strftime("%Y/%m/%d %H:%M:%S"), error_time.strftime("%Y/%m/%d %H:%M:%S"), 1)
+		error_instance = Error_Object(errorstring, traceback.format_exc(), error_time.strftime("%Y/%m/%d %H:%M:%S"), error_time.strftime("%Y/%m/%d %H:%M:%S"), "url: " + flaskrequest.url + " method: " + flaskrequest.method,  1)
 
 	error_instance_dict_json = json.dumps(error_instance.__dict__, ensure_ascii=True)
 	db.set(hashederror, error_instance_dict_json)

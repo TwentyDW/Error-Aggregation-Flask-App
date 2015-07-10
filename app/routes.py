@@ -9,13 +9,13 @@ raygun = raygunprovider.RaygunSender("VaBnbg4l+u9r+2qgdGtx1A==") # raygun
 flask.Provider(app, 'VaBnbg4l+u9r+2qgdGtx1A==').attach() # raygun
 app.config.from_object('config')
 
-""" to do: fix form and create mail module"""
+""" to do: use redis hash instead of key-value"""
 
 @app.errorhandler(Exception)
 def internal_error(error):
   send_error_to_raygun()
   error = str(error)
-  error_handling.store_error(error)
+  error_handling.store_error(error, request)
   return redirect (url_for('error_page'), code = 302) # will change
 
 def send_error_to_raygun():
@@ -25,7 +25,11 @@ def send_error_to_raygun():
 @app.route('/')
 def home():
   return render_template('home.html')
-
+	
+@app.route('/list')
+def list():
+  return render_template('list.html')
+	
 @app.route('/error_page')
 def error_page():
  return render_template('error_page.html')  
@@ -58,19 +62,6 @@ def email_errors():
 @app.route('/emailed_errors', methods=['GET', 'POST'])
 def emailed_errors():
 
-	begyear = request.form['begyear']
-	begmonth = request.form['begmonth']
-	begday = request.form['begday']
-	beghour = request.form['beghour']
-	begmin = request.form['begmin']
-	begsec = request.form['begsec']
-	endyear = request.form['endyear']
-	endmonth = request.form['endmonth']
-	endday = request.form['endday']
-	endhour = request.form['endhour']
-	endmin = request.form['endmin']
-	endsec = request.form['endsec']
-
 	report = error_handling.report_errors()
 
 	# move this to mail module
@@ -82,5 +73,6 @@ def emailed_errors():
 	
 	return render_template('emailed_errors.html')
 
-if __name__ == '__main__':
+#========== everything needs to go above this =============	
+if __name__ == '__main__': 
   app.run(debug=True)

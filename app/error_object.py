@@ -2,12 +2,13 @@ import json
 	
 class Error_Object():
   
-	def __init__(self, __message_string, __stack_trace, __first_occurrence, __last_occurrence, __count):
+	def __init__(self, __message_string, __stack_trace, __first_occurrence, __last_occurrence, __details, __count):
 		self.message_string = __message_string # name of error
 		self.stack_trace = __stack_trace # full stack trace given by traceback.format_exc()
 		self.first_occurrence = __first_occurrence # time of first occurrence in string format
 		self.last_occurrence = __last_occurrence # time of most recent occurrence in string format
 		self.count = __count # number of times occurred
+		self.details = __details # additional details, such as URL being accessed and the HTTP method
 		
 	def set_dict(self, dictobject):
 		self.__dict__ = dictobject
@@ -41,3 +42,9 @@ class Error_Object():
 	
 	def get_count(self):
 		return self.count
+		
+	def set_details(self, __details):
+		self.count = __count
+	
+	def get_details(self):
+		return self.details

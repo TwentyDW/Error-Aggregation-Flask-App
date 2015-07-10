@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class = "jumbo">
+	<table class="hoverTable" >
+		<tr>
+			<th><span title = "Hash of (error message string + stack trace string)">Hash</span></th>
+			<th><span title = "Error message string">Error Message String</span></th>
+			<th><span title = "Time when the error first occurred">First Occurrence</span></th>
+			<th><span title = "Time when the error last occurred">Last Occurrence</span></th>
+			<th><span title = "Number of times error has occurred">Count</span></th>
+		</tr>
+		
+		
+
+		
+		
+		<tr onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';">
+			<td>Item 1A</td><td>Item 1B</td><td>Item 1C</td>
+		</tr>
+		<tr onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';">
+			<td>Item 2A</td><td>Item 2B</td><td>Item 2C</td>
+		</tr>
+		<tr onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';">
+			<td>Item 3A</td><td>Item 3B</td><td>Item 3C</td>
+		</tr>
+		<tr onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';">
+			<td>Item 4A</td><td>Item 4B</td><td>Item 4C</td>
+		</tr>
+		<tr onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';">
+			<td>Item 5A</td><td>Item 5B</td><td>Item 5C</td>
+		</tr>
+	</table>
+</div>
+{% endblock %}
