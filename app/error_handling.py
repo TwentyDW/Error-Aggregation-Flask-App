@@ -1,4 +1,4 @@
-import datetime, redis, hashlib, pytz, time, os, sys, json, traceback
+import datetime, redis, hashlib, pytz, time, os, sys, jsonpickle, traceback
 from error_object import Error_Object
 
 db = redis.StrictRedis("localhost")
@@ -19,26 +19,24 @@ def store_error(errorstring, flaskrequest):
 
 	# update info about error
 	if db.hexists("errors", hashederror):
-		error_instance_dict_json = db.hget("errors", hashederror)
-		error_instance_dict = json.loads(error_instance_dict_json)
-		error_instance = Error_Object("","","","","","","",-5)
-		error_instance.__dict__ = error_instance_dict
+		error_instance_json = db.hget("errors", hashederror)
+		error_instance = jsonpickle.decode(error_instance_json)
 		error_instance.last_occurrence = error_time.strftime("%Y/%m/%d %H:%M:%S")  # update last occurrence time stamp
 		error_instance.count += 1 # increase error count by 1
 	else:
-		error_instance = Error_Object(errorstring, traceback.format_exc(), error_time.strftime("%Y/%m/%d %H:%M:%S"), error_time.strftime("%Y/%m/%d %H:%M:%S"), flaskrequest.url, flaskrequest.method,  1)
+		error_instance = Error_Object(hashederror, errorstring, traceback.format_exc(), error_time.strftime("%Y/%m/%d %H:%M:%S"), error_time.strftime("%Y/%m/%d %H:%M:%S"), flaskrequest.url, flaskrequest.method,  1)
 
-	error_instance_dict_json = json.dumps(error_instance.__dict__, ensure_ascii=True)
-	db.hset("errors", hashederror, error_instance_dict_json)
+	error_instance_json = jsonpickle.encode(error_instance)
+	db.hset("errors", hashederror, error_instance_json)
 	
-	write_str_to_file(error_instance_dict_json + "\n--------\n", "errorlog.txt")
+	write_str_to_file(error_instance_json + "\n--------\n", "errorlog.txt")
   
 def report_errors():
 	report = "list of json error objects:\n"
 	array_of_jsons = db.hvals("errors")
 
 	for i in range(0, len(array_of_jsons)):
-		report += array_of_jsons[i]
+		report += "\n" + array_of_jsons[i]
 
 	return report
 	

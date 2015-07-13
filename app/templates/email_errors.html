@@ -2,26 +2,8 @@
   
 {% block content %}
     <h1>Error aggregation report</h1>
-    <h2>Please input time interval</h2>
 	
     <form action="/emailed_errors" method="POST">
-		<p>beginning of interval (MM, DD, YYYYY, hh, mm, ss; 24-hour format)</p>
-		
-    <input type="text" name="begmonth" value="07">
-		<input type="text" name="begday" value="01">
-		<input type="text" name="begyear" value="2015">
-		<input type="text" name="beghour" value="00">
-		<input type="text" name="begmin" value="00">
-		<input type="text" name="begsec" value="00">
-		
-		<p>end of interval (MM, DD, YYYYY, hh, mm, ss; 24-hour format)</p>
-		<input type="text" name="endmonth" value="07">
-		<input type="text" name="endday" value="09">
-		<input type="text" name="endyear" value="2015">
-		<input type="text" name="endhour" value="23">
-		<input type="text" name="endmin" value="59">
-		<input type="text" name="endsec" value="59">
-		
     <input type="submit" name="my-form" value="Send error aggregation report">
     </form>
 {% endblock %}

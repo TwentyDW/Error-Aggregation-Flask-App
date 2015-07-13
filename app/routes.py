@@ -9,8 +9,6 @@ raygun = raygunprovider.RaygunSender("VaBnbg4l+u9r+2qgdGtx1A==") # raygun
 flask.Provider(app, 'VaBnbg4l+u9r+2qgdGtx1A==').attach() # raygun
 app.config.from_object('config')
 
-""" to do: use redis hash instead of key-value"""
-
 @app.errorhandler(Exception)
 def internal_error(error):
   send_error_to_raygun()
